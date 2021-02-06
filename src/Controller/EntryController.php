@@ -7,8 +7,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
-class EntryController extends ApiController
+class EntryController
 {
   /**
   * @Route("/entries", methods="GET")
@@ -17,7 +19,11 @@ class EntryController extends ApiController
   {
     $entries = $entryRepository->transformAll();
 
-    return $this->respond($entries);
+    // return new Response(
+    //     $entries,
+    //      Response::HTTP_OK
+    // );
+    return new JsonResponse($entries, 200, $headers = []);
   }
 
   /**
@@ -28,7 +34,8 @@ class EntryController extends ApiController
     $request = $this->transformJsonBody($request);
 
     if (! $request) {
-      return $this->respondValidationError('Please provide a valid request!');
+      // return $this->respondValidationError('Please provide a valid request!');
+      return 'Please provide a valid request!!';
     }
 
     // // validate the title
@@ -36,13 +43,13 @@ class EntryController extends ApiController
     //   return $this->respondValidationError('Please provide a title!');
     // }
     if (! $request->get('name')) {
-      return $this->respondValidationError('Please provide a name!');
+      return 'Please provide a name!';
     }
     if (! $request->get('email')) {
-      return $this->respondValidationError('Please provide a email!');
+      return 'Please provide a email!';
     }
     if (! $request->get('message')) {
-      return $this->respondValidationError('Please provide a message!');
+      return 'Please provide a message!';
     }
 
     // persist the new entry
@@ -55,6 +62,7 @@ class EntryController extends ApiController
     $em->persist($entry);
     $em->flush();
 
-    return $this->respondCreated($entryRepository->transform($entry));
+    // return $this->respondCreated($entryRepository->transform($entry));
+    return $entryRepository->transform($entry);
   }
 }
