@@ -1,0 +1,19 @@
+- setup symph app
+  - https://symfony.com/doc/current/setup.html#creating-symfony-applications
+- datatables ajax codeigniter
+  - https://github.com/ivan006/bg-table-page-1/commit/c19d007e71dce3ab5a971938c7fdfec0630e0168
+- symphony datatable ajax crud
+  - https://www.youtube.com/watch?v=qe1t91bXRiQ
+- my github repo
+  - https://github.com/ivan006/bri_emp__month__2021_jan__id__1
+- How to deploy symfony application on subdomain on shared
+  - https://medium.com/@runawaycoin/deploying-symfony-4-application-to-shared-hosting-with-just-ftp-access-e65d2c5e0e3d
+- okta api not isAuthorized
+  - https://github.com/okta/okta-jwt-verifier-php/issues/27
+  - https://github.com/okta/okta-jwt-verifier-php
+  - https://developer.okta.com/docs/guides/validate-access-tokens/php/overview/
+  - https://devforum.okta.com/t/401-unauthorized-error/10296
+- crud  Symfony  2020
+  - https://www.udemy.com/course/symfony-api-platform-reactjs-full-stack-masterclass/
+  - https://libs.garden/symfony/piotr-jura-udemy/symfony-4-basics
+  - https://thecodingmachine.io/building-a-single-page-application-with-symfony-4-and-vuejs
