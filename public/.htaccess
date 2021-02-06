@@ -1,0 +1,32 @@
+### Symphony 2.0 - Do not edit ###
+
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteBase /
+
+    ### DO NOT APPLY RULES WHEN REQUESTING "favicon.ico"
+    RewriteCond %{REQUEST_FILENAME} favicon.ico [NC]
+    RewriteRule .* - [S=14]
+
+    ### IMAGE RULES
+    RewriteRule ^image\/3\/([0-9]+)\/([0-9]+)\/([1-9])\/([a-fA-f0-9]{3,6})(\/(0|1))?\/(.+)\.(jpg|gif|jpeg|png|bmp)$ /symphony/image.php?param=3:$1:$2:$3:$4:$6:$7.$8 [L]
+    RewriteRule ^image\/2\/([0-9]+)\/([0-9]+)\/([1-9])(\/(0|1))?\/(.+)\.(jpg|gif|jpeg|png|bmp)$ /symphony/image.php?param=2:$1:$2:$3:0:$5:$6.$7 [L]
+    RewriteRule ^image\/1\/([0-9]+)\/([0-9]+)(\/(0|1))?\/(.+)\.(jpg|gif|jpeg|png|bmp)$ /symphony/image.php?param=1:$1:$2:0:0:$4:$5.$6 [L]
+    RewriteRule ^image(\/(0|1))?\/(.+)\.(jpg|gif|jpeg|png|bmp)$ /symphony/image.php?param=0:0:0:0:0:$2:$3.$4 [L]
+
+    ### CHECK FOR TRAILING SLASH - Will ignore files
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_URI} !/$
+    RewriteCond %{REQUEST_URI} !(.*)/$
+    RewriteRule ^(.*)$ /$1/ [L,R=301]
+
+    ### MAIN REWRITE - This will ignore directories
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)\/$ /index.php?page=$1&%{QUERY_STRING} [L]
+
+</IfModule>
+
+DirectoryIndex index.php
+IndexIgnore *
+
+######
