@@ -4,12 +4,12 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-class MovieController
+class EntryController
 {
     /**
-    * @Route("/movies")
+    * @Route("/entries")
     */
-    public function moviesAction()
+    public function entriesAction()
     {
         return new JsonResponse([
             [
