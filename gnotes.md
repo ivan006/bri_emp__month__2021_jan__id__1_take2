@@ -17,3 +17,6 @@
   - https://www.udemy.com/course/symfony-api-platform-reactjs-full-stack-masterclass/
   - https://libs.garden/symfony/piotr-jura-udemy/symfony-4-basics
   - https://thecodingmachine.io/building-a-single-page-application-with-symfony-4-and-vuejs
+- semd emails symphony Gmail
+  - https://symfony.com/doc/current/mailer.html#installation
+  - https://stackoverflow.com/questions/47713632/google-smtp-connection-timed-out

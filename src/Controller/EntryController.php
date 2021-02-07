@@ -16,6 +16,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 
 
@@ -43,14 +47,14 @@ class EntryController extends AbstractController
   * @Route("/entries")
   */
   // public function index(EntryRepository $entryRepository)
-  public function new(Request $request): Response
+  public function new(Request $request, MailerInterface $mailer): Response
   {
 
-    $task = new Entry();
+    $entry = new Entry();
 
-    $form = $this->createFormBuilder($task)
+    $form = $this->createFormBuilder($entry)
     ->add('name', TextType::class)
-    ->add('email', TextType::class)
+    ->add('email', EmailType::class)
     ->add('message', TextType::class)
     ->add('save', SubmitType::class, ['label' => 'Create'])
     ->getForm();
@@ -63,6 +67,25 @@ class EntryController extends AbstractController
       $entityManager = $this->getDoctrine()->getManager();
       $entityManager->persist($entry);
       $entityManager->flush();
+
+      $name = $form->get('name')->getData();
+      $email = $form->get('email')->getData();
+      $message = $form->get('message')->getData();
+      // return new JsonResponse($email, 200, $headers = []);
+
+      // $mailer = new MailerInterface();
+      $email = (new Email())
+      ->from('hello@example.com')
+      ->to($email)
+      ->cc('ivan.copeland2015@gmail.com')
+      //->bcc('bcc@example.com')
+      //->replyTo('fabien@example.com')
+      //->priority(Email::PRIORITY_HIGH)
+      ->subject('bri_emp__month__2021_jan__id__1_take2')
+      ->text($name." - ".$email." - ".$message)
+      ->html('<p>See Twig integration for better HTML integration!</p>');
+
+      $mailer->send($email);
 
       // return $this->redirectToRoute('entries');
       return $this->redirect('entry_success');
