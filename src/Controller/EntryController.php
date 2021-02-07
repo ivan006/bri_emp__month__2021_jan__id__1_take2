@@ -22,6 +22,8 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+
 
 
 class EntryController extends AbstractController
@@ -30,7 +32,7 @@ class EntryController extends AbstractController
   /**
   * @Route("/entries")
   */
-  public function new(Request $request, MailerInterface $mailer): Response
+  public function new(Request $request, MailerInterface $mailer, HttpClientInterface $client): Response
   {
 
     $entry = new Entry();
@@ -44,6 +46,18 @@ class EntryController extends AbstractController
 
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
+
+      // $form_recaptcha = $request->get('form_recaptcha');
+      $form_recaptcha = $request->get('g-recaptcha-response');
+      $secret_key = $_ENV['recaptcha_SECRET_KEY'];
+      $recaptcha_response = $client->request('POST', "https://www.google.com/recaptcha/api/siteverify?secret=$secret_key&response={".$form_recaptcha."}", [
+        'headers' => [
+          'Content-Type' => 'text/plain',
+        ],
+      ]);
+      $rrr = json_decode($recaptcha_response);
+
+      return new JsonResponse($rrr, 200, $headers = []);
 
       $entry = $form->getData();
 
@@ -81,7 +95,6 @@ class EntryController extends AbstractController
     return $this->render('Entry/new.html.twig', [
       'form' => $form->createView(),
       'site_key' => "6LdW5U0aAAAAAMu3Dhve3EGq1RwOLjDivitoBDO_",
-      'secret_key' => $_ENV['RECAPTURE_SECRET_KEY'],
     ]);
 
 

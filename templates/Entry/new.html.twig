@@ -22,7 +22,7 @@
 
     {{ form_start(form) }}
     {# ... #}
-    <input type="text" name="form_recapture" id="form_recapture" style="display:none;" value="">
+    <input type="text" name="g-recaptcha-response" id="g-recaptcha-response" style="display:none;" value="">
     {{ form_end(form) }}
 
   </div>
@@ -35,7 +35,7 @@
   //       // Add your logic to submit to your backend server here.
   //       alert(token)
   //       $(document).ready(function(){
-  //         $("#form_recapture").val("token");
+  //         $("#form_recaptcha").val("token");
   //       });
   //     });
   //   });
@@ -45,7 +45,7 @@
       // Add your logic to submit to your backend server here.
       // alert(token)
       $(document).ready(function(){
-        $("#form_recapture").val(token);
+        $("#g-recaptcha-response").val(token);
       });
     });
   });
