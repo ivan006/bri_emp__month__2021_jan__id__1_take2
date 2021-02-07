@@ -14,7 +14,12 @@
   <div class="container">
     <h2>Stacked form</h2>
     {# templates/task/new.html.twig #}
-    {{ form(form) }}
+    {# this form theme will be applied only to the form of this template #}
+    {% form_theme form 'bootstrap_4_horizontal_layout.html.twig' %}
+
+    {{ form_start(form) }}
+    {# ... #}
+    {{ form_end(form) }}
     <!-- <form action="/action_page.php">
       <div class="form-group">
         <label for="email">Name:</label>
