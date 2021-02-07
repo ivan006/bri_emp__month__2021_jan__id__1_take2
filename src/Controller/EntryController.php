@@ -49,7 +49,7 @@ class EntryController extends AbstractController
 
       // $form_recaptcha = $request->get('form_recaptcha');
       $form_recaptcha = $request->get('g-recaptcha-response');
-      $secret_key = $_ENV['recaptcha_SECRET_KEY'];
+      $secret_key = $_ENV['google_recaptcha_secret'];
       $recaptcha_response = $client->request('POST', "https://www.google.com/recaptcha/api/siteverify?secret=$secret_key&response=$form_recaptcha", [
         'headers' => [
           'Content-Type' => 'text/plain',
@@ -103,7 +103,7 @@ class EntryController extends AbstractController
 
     return $this->render('Entry/new.html.twig', [
       'form' => $form->createView(),
-      'site_key' => "6LdW5U0aAAAAAMu3Dhve3EGq1RwOLjDivitoBDO_",
+      'site_key' => $_ENV['google_recaptcha_key'],
     ]);
 
 
