@@ -20,33 +20,16 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 
 
 class EntryController extends AbstractController
 {
-  // /**
-  // * @Route("/entries", methods="GET")
-  // */
-  // public function index(EntryRepository $entryRepository)
-  // {
-  //   $entries = $entryRepository->transformAll();
-  //
-  //   // return new Response(
-  //   //     $entries,
-  //   //      Response::HTTP_OK
-  //   // );
-  //   return new JsonResponse($entries, 200, $headers = []);
-  // }
-
-  // /**
-  // * @Route("/entries", methods="GET")
-  // */
 
   /**
   * @Route("/entries")
   */
-  // public function index(EntryRepository $entryRepository)
   public function new(Request $request, MailerInterface $mailer): Response
   {
 
@@ -68,23 +51,27 @@ class EntryController extends AbstractController
       $entityManager->persist($entry);
       $entityManager->flush();
 
-      $name = $form->get('name')->getData();
-      $email = $form->get('email')->getData();
-      $message = $form->get('message')->getData();
+      $form_name = $form->get('name')->getData();
+      $form_email = $form->get('email')->getData();
+      $form_message = $form->get('message')->getData();
       // return new JsonResponse($email, 200, $headers = []);
 
       // $mailer = new MailerInterface();
-      $email = (new Email())
+      $email = (new TemplatedEmail())
       ->from('hello@example.com')
-      ->to($email)
+      ->to($form_email)
       ->cc('ivan.copeland2015@gmail.com')
       //->bcc('bcc@example.com')
       //->replyTo('fabien@example.com')
       //->priority(Email::PRIORITY_HIGH)
       ->subject('bri_emp__month__2021_jan__id__1_take2')
-      ->text($name." - ".$email." - ".$message)
-      ->html('<p>See Twig integration for better HTML integration!</p>');
-
+      ->text($form_name." - ".$form_email." - ".$form_message)
+      ->htmlTemplate('Entry/email.html.twig')
+      ->context([
+        'form_name' => $form_name,
+        'form_email' => $form_email,
+        'form_message' => $form_message,
+      ]);
       $mailer->send($email);
 
       // return $this->redirectToRoute('entries');
@@ -93,6 +80,8 @@ class EntryController extends AbstractController
 
     return $this->render('Entry/new.html.twig', [
       'form' => $form->createView(),
+      'site_key' => "6LdW5U0aAAAAAMu3Dhve3EGq1RwOLjDivitoBDO_",
+      'secret_key' => $_ENV['RECAPTURE_SECRET_KEY'],
     ]);
 
 
