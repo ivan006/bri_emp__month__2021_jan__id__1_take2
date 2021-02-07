@@ -28,6 +28,7 @@ class EntryController extends AbstractController
   //   // );
   //   return new JsonResponse($entries, 200, $headers = []);
   // }
+
   /**
   * @Route("/entries", methods="GET")
   */
@@ -80,6 +81,7 @@ class EntryController extends AbstractController
     $em->flush();
 
     // return $this->respondCreated($entryRepository->transform($entry));
-    return $entryRepository->transform($entry);
+    // return $entryRepository->transform($entry);
+    return $this->redirectToRoute('entries');
   }
 }
