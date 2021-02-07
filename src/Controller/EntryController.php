@@ -111,24 +111,4 @@ class EntryController extends AbstractController
 
   }
 
-  /**
-  * @Route("/entry_success")
-  */
-  public function entry_success(EntryRepository $entryRepository)
-  {
-
-    return $this->render('Entry/entry_success.html.twig', []);
-
-  }
-
-  /**
-  * @Route("/entry_fails")
-  */
-  public function entry_fails(EntryRepository $entryRepository)
-  {
-
-    return $this->render('Entry/entry_fails.html.twig', []);
-
-  }
-
 }
