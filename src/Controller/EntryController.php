@@ -16,6 +16,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 use Symfony\Component\Mailer\MailerInterface;
@@ -30,7 +31,7 @@ class EntryController extends AbstractController
 {
 
   /**
-  * @Route("/entries")
+  * @Route("/")
   */
   public function new(Request $request, MailerInterface $mailer, HttpClientInterface $client): Response
   {
@@ -40,8 +41,8 @@ class EntryController extends AbstractController
     $form = $this->createFormBuilder($entry)
     ->add('name', TextType::class)
     ->add('email', EmailType::class)
-    ->add('message', TextType::class)
-    ->add('save', SubmitType::class, ['label' => 'Create'])
+    ->add('message', TextareaType::class)
+    ->add('save', SubmitType::class, ['label' => 'Submit'])
     ->getForm();
 
     $form->handleRequest($request);
@@ -80,7 +81,7 @@ class EntryController extends AbstractController
           //->bcc('bcc@example.com')
           //->replyTo('fabien@example.com')
           //->priority(Email::PRIORITY_HIGH)
-          ->subject('bri_emp__month__2021_jan__id__1_take2')
+          ->subject('Contact form')
           ->text($form_name." - ".$form_email." - ".$form_message)
           ->htmlTemplate('Entry/email.html.twig')
           ->context([
@@ -91,12 +92,12 @@ class EntryController extends AbstractController
           $mailer->send($email);
 
           // return $this->redirectToRoute('entries');
-          return $this->redirect('entry_success');
+            return $this->render('Entry/entry_success.html.twig', []);
         } else {
-          return $this->redirect('entry_failss');
+          return $this->render('Entry/entry_fails.html.twig', []);
         }
       } else {
-        return $this->redirect('entry_failss');
+        return $this->render('Entry/entry_fails.html.twig', []);
       }
 
     }
