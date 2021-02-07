@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\Task;
 use App\Entity\Entry;
 use App\Repository\EntryRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -34,14 +35,34 @@ class EntryController extends AbstractController
   */
   public function index(EntryRepository $entryRepository)
   {
+    // creates a task object and initializes some data for this example
+    $task = new Task();
+    $task->setTask('Write a blog post');
+    $task->setDueDate(new \DateTime('tomorrow'));
+
+    $form = $this->createFormBuilder($task)
+    ->add('task', TextType::class)
+    ->add('dueDate', DateType::class)
+    ->add('save', SubmitType::class, ['label' => 'Create Task'])
+    ->getForm();
+
+    // // ...
+    // $task = new Task();
+    // // ...
+    //
+    // $form = $this->createForm(TaskType::class, $task);
 
     return $this->render('Entity/create.html.twig', [
-      // this array defines the variables passed to the template,
-      // where the key is the variable name and the value is the variable value
-      // (Twig recommends using snake_case variable names: 'foo_bar' instead of 'fooBar')
-      'user_first_name' => "123",
-      'notifications' => "123",
+      'form' => $form->createView(),
     ]);
+
+    // return $this->render('Entity/create.html.twig', [
+    //   // this array defines the variables passed to the template,
+    //   // where the key is the variable name and the value is the variable value
+    //   // (Twig recommends using snake_case variable names: 'foo_bar' instead of 'fooBar')
+    //   'user_first_name' => "123",
+    //   'notifications' => "123",
+    // ]);
   }
 
   /**
