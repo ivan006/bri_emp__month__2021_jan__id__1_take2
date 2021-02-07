@@ -50,46 +50,55 @@ class EntryController extends AbstractController
       // $form_recaptcha = $request->get('form_recaptcha');
       $form_recaptcha = $request->get('g-recaptcha-response');
       $secret_key = $_ENV['recaptcha_SECRET_KEY'];
-      $recaptcha_response = $client->request('POST', "https://www.google.com/recaptcha/api/siteverify?secret=$secret_key&response={".$form_recaptcha."}", [
+      $recaptcha_response = $client->request('POST', "https://www.google.com/recaptcha/api/siteverify?secret=$secret_key&response=$form_recaptcha", [
         'headers' => [
           'Content-Type' => 'text/plain',
         ],
       ]);
-      $rrr = json_decode($recaptcha_response);
+      $recaptcha_response = json_decode($recaptcha_response->getContent());
 
-      return new JsonResponse($rrr, 200, $headers = []);
+      // return new JsonResponse($recaptcha_response->score, 200, $headers = []);
+      if (isset($recaptcha_response->score)) {
+        if ($recaptcha_response->score > 0.5) {
 
-      $entry = $form->getData();
+          $entry = $form->getData();
 
-      $entityManager = $this->getDoctrine()->getManager();
-      $entityManager->persist($entry);
-      $entityManager->flush();
+          $entityManager = $this->getDoctrine()->getManager();
+          $entityManager->persist($entry);
+          $entityManager->flush();
 
-      $form_name = $form->get('name')->getData();
-      $form_email = $form->get('email')->getData();
-      $form_message = $form->get('message')->getData();
-      // return new JsonResponse($email, 200, $headers = []);
+          $form_name = $form->get('name')->getData();
+          $form_email = $form->get('email')->getData();
+          $form_message = $form->get('message')->getData();
+          // return new JsonResponse($email, 200, $headers = []);
 
-      // $mailer = new MailerInterface();
-      $email = (new TemplatedEmail())
-      ->from('hello@example.com')
-      ->to($form_email)
-      ->cc('ivan.copeland2015@gmail.com')
-      //->bcc('bcc@example.com')
-      //->replyTo('fabien@example.com')
-      //->priority(Email::PRIORITY_HIGH)
-      ->subject('bri_emp__month__2021_jan__id__1_take2')
-      ->text($form_name." - ".$form_email." - ".$form_message)
-      ->htmlTemplate('Entry/email.html.twig')
-      ->context([
-        'form_name' => $form_name,
-        'form_email' => $form_email,
-        'form_message' => $form_message,
-      ]);
-      $mailer->send($email);
+          // $mailer = new MailerInterface();
+          $email = (new TemplatedEmail())
+          ->from('hello@example.com')
+          ->to($form_email)
+          ->cc('ivan.copeland2015@gmail.com')
+          //->bcc('bcc@example.com')
+          //->replyTo('fabien@example.com')
+          //->priority(Email::PRIORITY_HIGH)
+          ->subject('bri_emp__month__2021_jan__id__1_take2')
+          ->text($form_name." - ".$form_email." - ".$form_message)
+          ->htmlTemplate('Entry/email.html.twig')
+          ->context([
+            'form_name' => $form_name,
+            'form_email' => $form_email,
+            'form_message' => $form_message,
+          ]);
+          $mailer->send($email);
 
-      // return $this->redirectToRoute('entries');
-      return $this->redirect('entry_success');
+          // return $this->redirectToRoute('entries');
+          return $this->redirect('entry_success');
+        } else {
+          return $this->redirect('entry_failss');
+        }
+      } else {
+        return $this->redirect('entry_failss');
+      }
+
     }
 
     return $this->render('Entry/new.html.twig', [
@@ -108,6 +117,16 @@ class EntryController extends AbstractController
   {
 
     return $this->render('Entry/entry_success.html.twig', []);
+
+  }
+
+  /**
+  * @Route("/entry_fails")
+  */
+  public function entry_fails(EntryRepository $entryRepository)
+  {
+
+    return $this->render('Entry/entry_fails.html.twig', []);
 
   }
 
